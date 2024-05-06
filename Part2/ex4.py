@@ -16,10 +16,10 @@ def input_list_of_numbers() -> list:
     :rtype: list
     """
     input_list = []
-    temp_input = int(input("Enter a number: "))
+    temp_input = float(input("Enter a number: "))
     while temp_input != STOP_RECEIVING_INPUT:
         input_list.append(temp_input)
-        temp_input = int(input("Enter a number: "))
+        temp_input = float(input("Enter a number: "))
     return input_list
 
 
