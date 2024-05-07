@@ -12,19 +12,19 @@
         this._value = value; 
         this._next = next;
     }
-    public void setValue(int value)
+    public void SetValue(int value)
     {
         this._value = value;
     }
-    public int getValue()
+    public int GetValue()
     {
         return this._value;
     }
-    public void setNext(Node next)
+    public void SetNext(Node next)
     {
             this._next = next;
     }
-    public Node getNext()
+    public Node GetNext()
     {
         return this._next;
     }
