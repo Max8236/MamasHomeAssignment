@@ -2,6 +2,7 @@
 {
     private const int ROW_SIZE = 4;
     private const int COL_SIZE = 4;
+    private const int EMPTY_CELL = 0;
     private static int[] CELLS = { 2, 4 }; //const?
     private Random rng = new Random();
     private int[][] _data;
@@ -44,7 +45,7 @@
             for (int j = 0;j < COL_SIZE;j++)
             {
                 // cell is empty
-                if (this._data[i][j] == 0)
+                if (this._data[i][j] == EMPTY_CELL)
                 {
                     cells.Add(i,j);
                 }
@@ -64,6 +65,46 @@
         }
         return false;
     }
+    private KeyValuePair<int, int> getIndexesForMove(Direction direction, int row, int col)
+    {
+        switch (direction)
+        {
+            case Direction.Up:
+                return new KeyValuePair<int, int>(row - 1, col);
+            case Direction.Down:
+                return new KeyValuePair<int, int>(row + 1, col);
+            case Direction.Left:
+                return new KeyValuePair<int, int>(row, col - 1);
+            case Direction.Right:
+                return new KeyValuePair<int, int>(row, col + 1);
+        }
+        return new KeyValuePair<int, int>(0, 0);
+    }
+    private int swapCells(Direction direction, int row, int col)
+    {
+        int sum = 0;
+        KeyValuePair<int, int> indexes = this.getIndexesForMove(direction, row, col);
+        try
+        {
+            if (this._data[indexes.Key][indexes.Value] == this._data[row][col])
+            {
+                this._data[indexes.Key][indexes.Value] = this._data[row][col] * 2; // doubling the cell;
+                this._data[row][col] = EMPTY_CELL;
+                sum += this._data[indexes.Key][indexes.Value];
+            }
+            //swapping the empty cell with the cell to move everything in the dircetion
+            else if(this._data[indexes.Key][indexes.Value] == EMPTY_CELL)
+            {
+                int temp = this._data[indexes.Key][indexes.Value];
+                this._data[indexes.Key][indexes.Value] = this._data[row][col];
+                this._data[row][col] = temp;
+            }
+        }
+        catch (System.IndexOutOfRangeException e)
+        {
+        }
+        return sum;
+    }
     /// <summary>
     /// The function receives a direction to move the board to, tries to move the cells accordingly
     /// the function add a random cell with the value of 2/4 at a random position
@@ -75,16 +116,23 @@
     {
         int sum = 0; // sum of points gained
 
-        switch (direction)
+        //trying to move all cells of the board in the direction requested
+        for (int row = 0; row < ROW_SIZE; row++)
         {
-            case Direction.Up:
-                break;
-            case Direction.Down:
-                break;
-            case Direction.Left:
-                break;
-            case Direction.Right:
-                break;
+            for (int col = 0; col < COL_SIZE; col++)
+            {
+                try
+                {
+                    sum += swapCells(direction, row, col);
+                }
+                catch (System.IndexOutOfRangeException e)
+                {
+                }
+                if (!this.AddRandomCell())
+                {
+                    //check if lost
+                }
+            }
         }
         return sum;
     }
