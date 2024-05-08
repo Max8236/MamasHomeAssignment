@@ -1,7 +1,7 @@
 ﻿public class Board
 {
-    private const int ROW_SIZE = 4;
-    private const int COL_SIZE = 4;
+    internal const int ROW_SIZE = 4;
+    internal const int COL_SIZE = 4;
     private const int EMPTY_CELL = 0;
     private static int[] CELLS = { 2, 4 }; //const?
     private Random rng = new Random();
@@ -53,7 +53,7 @@
         }
         return cells;
     }
-    private bool AddRandomCell()
+    public bool AddRandomCell()
     {
         IDictionary<int, int> emptyCells = this.GetEmptyCells();
         // checking that dict isn't empty
@@ -65,7 +65,7 @@
         }
         return false;
     }
-    private KeyValuePair<int, int> getIndexesForMove(Direction direction, int row, int col)
+    internal KeyValuePair<int, int> getIndexesForMove(Direction direction, int row, int col)
     {
         switch (direction)
         {
@@ -100,7 +100,7 @@
                 this._data[row][col] = temp;
             }
         }
-        catch (System.IndexOutOfRangeException e)
+        catch (System.IndexOutOfRangeException)
         {
         }
         return sum;
@@ -125,15 +125,38 @@
                 {
                     sum += swapCells(direction, row, col);
                 }
-                catch (System.IndexOutOfRangeException e)
+                catch (System.IndexOutOfRangeException)
                 {
-                }
-                if (!this.AddRandomCell())
-                {
-                    //check if lost
                 }
             }
         }
         return sum;
+    }
+    
+    internal bool checkIfPlayerLost()
+    {
+        //checking if player can make a move on any cell to any direction - functions is used when board is full
+        //no need to check for empty cells
+        for (int row = 0; row < ROW_SIZE; row++)
+        {
+            for(int col = 0; col < COL_SIZE;col++)
+            {
+                for (Direction direction = 0; direction <= Direction.Right; direction++)
+                    try
+                    {
+                        KeyValuePair<int, int> indexes = getIndexesForMove(direction,row, col);
+                        if (this._data[row][col] == this._data[indexes.Key][indexes.Value])
+                        {
+                            return true;
+                        }
+
+                    }
+                    catch (System.IndexOutOfRangeException)
+                    {
+                    }
+            }
+        }
+            
+        return false;
     }
 }

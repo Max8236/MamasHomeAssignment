@@ -11,8 +11,23 @@
     {
         this._points = points;
     }
+    public Board getBoard() 
+    {
+        return this._board;
+    }
     public void Move(Direction direction)
     {
-        //todo
+        if (this._status != GameStatus.Loss)
+        {
+            this._points = this._board.Move(direction);
+            if (!this._board.AddRandomCell())
+            {
+                if(this._board.checkIfPlayerLost())
+                {
+                    this._status = GameStatus.Loss;
+                }
+            }
+        }
+
     }
 }
