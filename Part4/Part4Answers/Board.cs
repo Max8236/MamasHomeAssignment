@@ -43,9 +43,9 @@
         this._data[second_row][second_col] = Board.CELLS[rng.Next(CELLS.Length)];
 
     }
-    private IDictionary<int, int> GetEmptyCells()
+    private List<KeyValuePair<int, int>> GetEmptyCells()
     {
-        IDictionary<int, int> cells = new Dictionary<int, int>();
+        List<KeyValuePair<int, int>> cells = new List<KeyValuePair<int, int>>();
         for (int i = 0;i < ROW_SIZE; i++)
         {
             for (int j = 0;j < COL_SIZE;j++)
@@ -53,7 +53,7 @@
                 // cell is empty
                 if (this._data[i][j] == EMPTY_CELL)
                 {
-                    cells.Add(i,j);
+                    cells.Add(new KeyValuePair<int, int>(i,j));
                 }
             }
         }
@@ -61,7 +61,7 @@
     }
     public bool AddRandomCell()
     {
-        IDictionary<int, int> emptyCells = this.GetEmptyCells();
+        List<KeyValuePair<int, int>> emptyCells = this.GetEmptyCells();
         // checking that dict isn't empty
         if (emptyCells.Count>0)
         {
@@ -123,9 +123,9 @@
         int sum = 0; // sum of points gained
 
         //trying to move all cells of the board in the direction requested
-        for (int row = 0; row < ROW_SIZE; row++)
+        for (int row = direction != Direction.Up ? 0 : ROW_SIZE - 1; direction != Direction.Up ? (row < ROW_SIZE) : (row >= 0); row += direction != Direction.Up ? 1 : -1)
         {
-            for (int col = 0; col < COL_SIZE; col++)
+            for (int col = direction != Direction.Left ? 0 : COL_SIZE - 1; direction != Direction.Left ? (col < COL_SIZE) : (col >= 0); col += direction != Direction.Left ? 1 : -1)
             {
                 try
                 {
