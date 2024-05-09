@@ -2,6 +2,7 @@
 {
     internal const int ROW_SIZE = 4;
     internal const int COL_SIZE = 4;
+    internal const int POINTS_TO_WIN = 2048; //cell that you need to achieve in order to win is 2048
     private const int EMPTY_CELL = 0;
     private static int[] CELLS = { 2, 4 }; //const?
     private Random rng = new Random();
@@ -16,6 +17,11 @@
     }
     public Board()
     {
+        this._data = new int[ROW_SIZE][];
+        for(int row = 0; row < ROW_SIZE; row++)
+        {
+            this._data[row] = new int[COL_SIZE];
+        }
         this.InitializeBoard();
     }
     /// <summary>
@@ -159,4 +165,20 @@
             
         return false;
     }
+    internal bool CheckIfWon()
+    {
+        for(int row = 0;row < ROW_SIZE; row++)
+        {
+            for(int col=0;col < COL_SIZE; col++)
+            {
+                if (this._data[row][col] == POINTS_TO_WIN)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }
+

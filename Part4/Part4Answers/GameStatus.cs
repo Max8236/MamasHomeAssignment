@@ -1,4 +1,4 @@
-﻿enum GameStatus
+﻿public enum GameStatus
 {
     Win, Loss, Idle
 }
