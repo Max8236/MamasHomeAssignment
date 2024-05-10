@@ -5,6 +5,9 @@
     {
         this._game = new Game();
     }
+    /// <summary>
+    /// The function prints the boards cells according to board size
+    /// </summary>
     public void PrintBoard()
     {
         Console.Clear();
@@ -18,7 +21,10 @@
             Console.WriteLine("");
         }
     }
-    //thread?
+    /// <summary>
+    /// The function inputs the users next move according to input of arrow keys and returns a direciton accordingly
+    /// </summary>
+    /// <returns>direction of move - of type Direciton</returns>
     public Direction InputNextMove()
     {
         Console.WriteLine("Press Arrow Key:");
@@ -39,6 +45,9 @@
         }
         return Direction.Right;
     }
+    /// <summary>
+    /// the function runs the game, by inputting and moving the player accordingly and prints the board
+    /// </summary>
     public void Run()
     {
         while(this._game.GetStatus() != GameStatus.Loss)
@@ -46,6 +55,7 @@
             this.PrintBoard();
             this._game.Move(this.InputNextMove());
         }
+        this.PrintBoard();
         Console.Write("Player Lost!");
     }
 }

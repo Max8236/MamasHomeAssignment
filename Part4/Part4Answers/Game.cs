@@ -25,6 +25,11 @@
     {
         return this._status;
     }
+    /// <summary>
+    /// the function receives the direction of the move and moves the player accordingly,
+    /// updates _gamestatus according to if player won or lost
+    /// </summary>
+    /// <param name="direction">direciton of move - of type Direction</param>
     public void Move(Direction direction)
     {
         if (this._status != GameStatus.Loss)
