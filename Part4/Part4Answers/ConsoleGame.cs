@@ -11,7 +11,7 @@
     public void PrintBoard()
     {
         Console.Clear();
-        int[][] boardData = this._game.getBoard().getData();
+        int[][] boardData = this._game.GetBoard().GetData();
         for(int row = 0; row < Board.ROW_SIZE; row++)
         {
             for(int col = 0; col < Board.COL_SIZE; col++)

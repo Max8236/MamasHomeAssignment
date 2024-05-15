@@ -9,15 +9,15 @@
         this._status = GameStatus.Idle;
         this._points = 0;
     }
-    public int getPoints()
+    public int GetPoints()
     {
         return this._points;
     }
-    protected void setPoints(int points)
+    protected void SetPoints(int points)
     {
         this._points = points;
     }
-    public Board getBoard() 
+    public Board GetBoard() 
     {
         return this._board;
     }
@@ -34,17 +34,17 @@
     {
         if (this._status != GameStatus.Loss)
         {
-            this._points = this._board.Move(direction);
-            if(this._status != GameStatus.Win && this._points >= Board.POINTS_TO_WIN && this._board.CheckIfWon())
+            int pointsGained = this._board.Move(direction);
+            this._points += pointsGained;
+            //checking if the player won
+            if (this._status != GameStatus.Win && pointsGained >= Board.POINTS_TO_WIN && this._board.CheckIfWon())
             {
                 this._status = GameStatus.Win;
             }
-            if (!this._board.AddRandomCell())
+            //checking if the board is full, in case the board is full checking if the player lost
+            else if (!this._board.AddRandomCell() && this._board.CheckIfPlayerLost())
             {
-                if(this._board.checkIfPlayerLost())
-                {
-                    this._status = GameStatus.Loss;
-                }
+                this._status = GameStatus.Loss;
             }
         }
 

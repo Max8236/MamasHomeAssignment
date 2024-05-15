@@ -13,17 +13,17 @@
 
 
     private int[][] _data;
-    public int[][] getData()
+    public int[][] GetData()
     {
         return this._data;
     }
-    protected void setData(int[][] data)
+    protected void SetData(int[][] data)
     {
         this._data = data;
     }
     /// <summary>
     /// Constructor function for class Board
-    /// initiallizes the board with empty cells 
+    /// initializes the board with empty cells 
     /// and then inserts two random cells
     /// </summary>
     public Board()
@@ -61,14 +61,14 @@
     private List<KeyValuePair<int, int>> GetEmptyCells()
     {
         List<KeyValuePair<int, int>> cells = new List<KeyValuePair<int, int>>();
-        for (int i = 0;i < ROW_SIZE; i++)
+        for (int row = 0;row < ROW_SIZE; row++)
         {
-            for (int j = 0;j < COL_SIZE;j++)
+            for (int col = 0; col < COL_SIZE; col++)
             {
                 // cell is empty
-                if (this._data[i][j] == EMPTY_CELL)
+                if (this._data[row][col] == EMPTY_CELL)
                 {
-                    cells.Add(new KeyValuePair<int, int>(i,j));
+                    cells.Add(new KeyValuePair<int, int>(row,col));
                 }
             }
         }
@@ -97,7 +97,7 @@
     /// <param name="row">source row index</param>
     /// <param name="col">source column index</param>
     /// <returns>destination index for move - indexes of one cell shifted to the direction of the move</returns>
-    internal KeyValuePair<int, int> getIndexesForMove(Direction direction, int row, int col)
+    internal KeyValuePair<int, int> GetIndexesForMove(Direction direction, int row, int col)
     {
         switch (direction)
         {
@@ -121,10 +121,10 @@
     /// <param name="row">source row index</param>
     /// <param name="col">source destination index</param>
     /// <returns></returns>
-    private int swapCells(Direction direction, int row, int col)
+    private int SwapCells(Direction direction, int row, int col)
     {
         int sum = 0;
-        KeyValuePair<int, int> indexes = this.getIndexesForMove(direction, row, col);
+        KeyValuePair<int, int> indexes = this.GetIndexesForMove(direction, row, col);
         try
         {
             //checking if the destination cell is same as source cell
@@ -137,9 +137,14 @@
             //swapping the empty cell with the cell to move everything in the dircetion
             else if(this._data[indexes.Key][indexes.Value] == EMPTY_CELL)
             {
-                int temp = this._data[indexes.Key][indexes.Value];
-                this._data[indexes.Key][indexes.Value] = this._data[row][col];
-                this._data[row][col] = temp;
+                (this._data[row][col], this._data[indexes.Key][indexes.Value]) = (this._data[indexes.Key][indexes.Value], this._data[row][col]);
+                //checking if there are more empty cells to swap the cell with
+                //one cell shifted in the direction of the move from the new cell indexes
+                KeyValuePair<int, int> newIndexes = this.GetIndexesForMove(direction, indexes.Key, indexes.Value);
+                if (this._data[newIndexes.Key][newIndexes.Value] == EMPTY_CELL)
+                {
+                    sum += SwapCells(direction, indexes.Key, indexes.Value);
+                }
             }
         }
         catch (System.IndexOutOfRangeException)
@@ -159,8 +164,8 @@
         int sum = 0; // sum of points gained
 
         //trying to move all cells of the board in the direction requested
-        //determining scan dirceiton according to direction of move(if the move is upwards scan needs to start from bottom)
-        //scan diretion is opposite from move direction
+        //determining scan direction according to direction of move(if the move is upwards scan needs to start from bottom)
+        //scan direction is opposite from move direction
         for (int row = direction != Direction.Up ? 0 : ROW_SIZE - 1; direction != Direction.Up ? (row < ROW_SIZE) : (row >= 0); row += direction != Direction.Up ? 1 : -1)
         {
             for (int col = direction != Direction.Left ? 0 : COL_SIZE - 1; direction != Direction.Left ? (col < COL_SIZE) : (col >= 0); col += direction != Direction.Left ? 1 : -1)
@@ -168,7 +173,7 @@
                 try
                 {
                     //trying to add cells or swapping them accordingly
-                    sum += swapCells(direction, row, col);
+                    sum += SwapCells(direction, row, col);
                 }
                 catch (System.IndexOutOfRangeException)
                 {
@@ -182,7 +187,7 @@
     /// </summary>
     /// <returns>boolean value that indicates if player lost(unable to move)</returns>
     
-    internal bool checkIfPlayerLost()
+    internal bool CheckIfPlayerLost()
     {
         //checking if player can make a move on any cell to any direction - functions is used when board is full
         //no need to check for empty cells
@@ -193,10 +198,10 @@
                 for (Direction direction = 0; direction <= Direction.Right; direction++)
                     try
                     {
-                        KeyValuePair<int, int> indexes = getIndexesForMove(direction,row, col);
+                        KeyValuePair<int, int> indexes = GetIndexesForMove(direction,row, col);
                         if (this._data[row][col] == this._data[indexes.Key][indexes.Value])
                         {
-                            return true;
+                            return false;
                         }
 
                     }
@@ -206,10 +211,10 @@
             }
         }
             
-        return false;
+        return true;
     }
     /// <summary>
-    /// Function checks if player won, if cell a achieved win cell size(POINTS_TO_WIN) and retuns a boolean value accordingly 
+    /// Function checks if player won, if a cell achieved win cell size(POINTS_TO_WIN) the function returns a boolean value accordingly 
     /// </summary>
     /// <returns>boolean value that indicates if the player won</returns>
     internal bool CheckIfWon()
