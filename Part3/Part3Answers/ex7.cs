@@ -183,7 +183,7 @@
     {
         // 0 - is a special case
         if(num == 0) return 0;
-        // initalizing the length counter with the length of zero
+        // initializing the length counter with the length of zero
         int len = NumericalExpression._numberLengths["0"];
         for (int i = 1; i < num; i++)
         {
